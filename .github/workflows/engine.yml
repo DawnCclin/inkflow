@@ -45,7 +45,7 @@ jobs:
       - name: Checkout InkFlow 引擎
         uses: actions/checkout@v4
         with:
-          repository: inkflow/inkflow
+          repository: DawnCclin/inkflow
           ref: ${{ inputs.inkflow_ref }}
           path: .inkflow
 
