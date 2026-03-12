@@ -29,12 +29,16 @@ on:
         description: "GitHub Pages 目标分支，默认 main"
         required: false
 
+concurrency:
+  group: inkflow-publish-${{ github.repository }}
+  cancel-in-progress: false   # 排队等待，不取消，保证每次 push 都被处理
+
 jobs:
   publish:
     name: Publish Articles
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write   # 需要写权限才能回写发布状态文件
 
     steps:
       - name: Checkout 写作仓库
@@ -70,3 +74,15 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           PYTHONPATH=$GITHUB_WORKSPACE/.inkflow python $GITHUB_WORKSPACE/.inkflow/agent/orchestrator.py
+
+      - name: 回写发布状态文件
+        if: always()
+        run: |
+          cd ${{ github.workspace }}
+          if [ -f ".inkflow-state.json" ]; then
+            git config user.name  "InkFlow Bot"
+            git config user.email "inkflow-bot@github.com"
+            git add .inkflow-state.json
+            git diff --cached --quiet || git commit -m "chore: 更新 InkFlow 发布状态 [skip ci]"
+            git push origin HEAD
+          fi
