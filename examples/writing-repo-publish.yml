@@ -21,6 +21,8 @@ on:
 jobs:
   publish:
     uses: DawnCclin/inkflow/.github/workflows/engine.yml@main
+    permissions:
+      contents: write   # 允许 engine 回写 .inkflow-state.json 状态文件
     with:
       articles_dir: articles  # 对应仓库中存放文章的目录
     secrets: inherit
