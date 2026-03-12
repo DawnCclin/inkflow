@@ -20,7 +20,7 @@ on:
 
 jobs:
   publish:
-    uses: inkflow/inkflow/.github/workflows/engine.yml@main
+    uses: DawnCclin/inkflow/.github/workflows/engine.yml@main
     with:
       articles_dir: articles  # 对应仓库中存放文章的目录
     secrets: inherit
