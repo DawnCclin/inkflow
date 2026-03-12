@@ -1,0 +1,26 @@
+# 将此文件放到写作仓库的 .github/workflows/publish.yml
+#
+# 前置配置（在写作仓库的 Settings → Secrets and variables → Actions 中添加）：
+#   JUEJIN_COOKIE       掘金登录 Cookie（sessionid=xxx）
+#   PAGES_DEPLOY_TOKEN  GitHub PAT（勾选 repo Contents:write）
+#   PAGES_REPO          GitHub Pages 仓库，如 alice/alice.github.io
+#   PAGES_BRANCH        Pages 目标分支，如 main（可省略，默认 main）
+
+name: Publish Articles via InkFlow
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "articles/**/*.md"
+
+  # 支持手动触发，方便调试
+  workflow_dispatch:
+
+jobs:
+  publish:
+    uses: inkflow/inkflow/.github/workflows/engine.yml@main
+    with:
+      articles_dir: articles  # 对应仓库中存放文章的目录
+    secrets: inherit

@@ -1,0 +1,72 @@
+name: InkFlow Publish Engine
+
+on:
+  workflow_call:
+    inputs:
+      articles_dir:
+        description: "文章所在目录（相对于写作仓库根目录）"
+        type: string
+        default: "articles"
+      python_version:
+        description: "Python 版本"
+        type: string
+        default: "3.11"
+      inkflow_ref:
+        description: "InkFlow 引擎版本（branch/tag/sha）"
+        type: string
+        default: "main"
+    secrets:
+      JUEJIN_COOKIE:
+        description: "掘金登录 Cookie（sessionid）"
+        required: false
+      PAGES_DEPLOY_TOKEN:
+        description: "GitHub PAT，需要 contents:write 权限"
+        required: false
+      PAGES_REPO:
+        description: "GitHub Pages 目标仓库，格式 owner/repo"
+        required: false
+      PAGES_BRANCH:
+        description: "GitHub Pages 目标分支，默认 main"
+        required: false
+
+jobs:
+  publish:
+    name: Publish Articles
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout 写作仓库
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # 需要对比 HEAD~1 检测变更文件
+
+      - name: Checkout InkFlow 引擎
+        uses: actions/checkout@v4
+        with:
+          repository: inkflow/inkflow
+          ref: ${{ inputs.inkflow_ref }}
+          path: .inkflow
+
+      - name: Setup Python ${{ inputs.python_version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python_version }}
+          cache: pip
+          cache-dependency-path: .inkflow/requirements.txt
+
+      - name: 安装依赖
+        run: pip install -r .inkflow/requirements.txt
+
+      - name: 运行 InkFlow 发布引擎
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+          INKFLOW_ARTICLES_DIR: ${{ inputs.articles_dir }}
+          JUEJIN_COOKIE: ${{ secrets.JUEJIN_COOKIE }}
+          PAGES_DEPLOY_TOKEN: ${{ secrets.PAGES_DEPLOY_TOKEN }}
+          PAGES_REPO: ${{ secrets.PAGES_REPO }}
+          PAGES_BRANCH: ${{ secrets.PAGES_BRANCH }}
+        run: |
+          cd $GITHUB_WORKSPACE
+          PYTHONPATH=$GITHUB_WORKSPACE/.inkflow python $GITHUB_WORKSPACE/.inkflow/agent/orchestrator.py
