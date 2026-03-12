@@ -4,7 +4,7 @@
 
 **Write Once, Publish Everywhere** —— 专注写作，发布交给 InkFlow。
 
-在 Obsidian 写好文章，配置好 Front Matter，Push 到 GitHub，剩下的全部自动完成：图片处理、格式适配、多平台并发发布、结果通知。
+在 Obsidian 写好文章，配置好 git插件与快捷键，写作完毕快捷键 Push 到 GitHub，剩下的全部自动完成：图片处理、格式适配、多平台并发发布、结果通知。
 
 ## 支持平台
 
