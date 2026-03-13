@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-import re
 import subprocess
 from pathlib import Path
 
@@ -97,17 +96,10 @@ def load_article(file_path: str | Path) -> Article | None:
 
 def _process_content(content: str, article_dir: Path) -> str:
     """
-    对 Markdown 正文做基础预处理：
-    - 本地相对图片路径替换占位符（OSS 上传在 Phase 2 实现）
-    - 标准化代码块语言标识
+    对 Markdown 正文做基础预处理。
+    本地相对图片路径替换占位符（OSS 上传在 Phase 2 实现）。
     """
-    content = _normalize_code_fences(content)
     return content
-
-
-def _normalize_code_fences(content: str) -> str:
-    """将没有语言标识的代码块统一加上 text 标识，避免部分平台渲染异常。"""
-    return re.sub(r"^```\s*$", "```text", content, flags=re.MULTILINE)
 
 
 def load_articles_from_paths(file_paths: list[Path]) -> list[Article]:
