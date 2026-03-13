@@ -18,11 +18,13 @@ on:
   # 支持手动触发，方便调试
   workflow_dispatch:
 
+# 顶层声明权限，reusable workflow 才能继承到 contents:write
+permissions:
+  contents: write
+
 jobs:
   publish:
     uses: DawnCclin/inkflow/.github/workflows/engine.yml@main
-    permissions:
-      contents: write   # 允许 engine 回写 .inkflow-state.json 状态文件
     with:
       articles_dir: articles  # 对应仓库中存放文章的目录
     secrets: inherit
