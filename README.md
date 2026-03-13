@@ -1,5 +1,8 @@
 # InkFlow
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org)
+
 基于 GitHub Actions + Python 的多平台技术文章自动发布引擎。
 
 **Write Once, Publish Everywhere** —— 专注写作，发布交给 InkFlow。
@@ -169,3 +172,7 @@ InkFlow 通过 `git diff HEAD~1 HEAD` 只处理本次 Push 变更的文件，未
 
 **Q：想手动触发发布怎么操作？**
 进入写作仓库 → Actions → Publish Articles via InkFlow → **Run workflow**。
+
+## License
+
+[MIT](LICENSE) © 2026 DawnCclin
